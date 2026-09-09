@@ -1,4 +1,4 @@
-
+# Funciones predecir(), cargar_modelo(), normalizar_country()
 
 
 PAISES_CONOCIDOS = {'Australia', 'Brazil', 'Canada', 'France', 'Germany', 'India',
@@ -9,3 +9,5 @@ PAISES_CONOCIDOS = {'Australia', 'Brazil', 'Canada', 'France', 'Germany', 'India
 
 def normalizar_country(country):
     return country if country in PAISES_CONOCIDOS else 'Otros'
+
+
