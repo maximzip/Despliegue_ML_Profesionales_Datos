@@ -35,7 +35,7 @@ curl -X POST https://<tu-app>.onrender.com/predict \
 | RemoteWork | categórico | "Remote", "In-person", "Hybrid...", etc. |
 | Industry | categórico | "Software Development", "Fintech", etc. |
 | Country | categórico | "Spain", "Germany", ... "Otros" (para países no frecuentes) |
-| ConvertedCompYearly | numérico (moneda) | 45000 |
+| ConvertedCompYearly | numérico (dólares) | 45000 |
 
 Todas las opciones exactas están disponibles como `<select>` en la interfaz web (`/`),
 para evitar errores de tecleo en valores categóricos.
