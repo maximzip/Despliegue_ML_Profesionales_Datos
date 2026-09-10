@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Usage Prediction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F6F2;
+    --ink: #1B1F23;
+    --muted: #6B7280;
+    --accent: #0E7C7B;
+    --accent-dark: #0A5F5E;
+    --line: #DAD7CE;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 64px 20px;
+  }
+  main {
+    width: 100%;
+    max-width: 560px;
+  }
+  .hero {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .hero svg {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 1.2;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    margin: 0;
+    max-width: 40ch;
+    margin-inline: auto;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  select, input {
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  select:focus, input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  button {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    padding: 13px 20px;
+    margin-top: 8px;
+    cursor: pointer;
+  }
+  button:hover { background: var(--accent-dark); }
+  #result {
+    margin-top: 28px;
+    padding: 16px 18px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: 'IBM Plex Sans', monospace;
+    font-size: 13px;
+    white-space: pre-wrap;
+    display: none;
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="hero">
+    <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="5" stroke="#0E7C7B" stroke-width="1.5"/>
+      <circle cx="54" cy="18" r="5" stroke="#0E7C7B" stroke-width="1.5"/>
+      <circle cx="18" cy="54" r="5" stroke="#0E7C7B" stroke-width="1.5"/>
+      <circle cx="36" cy="36" r="8" fill="#0E7C7B"/>
+      <line x1="22" y1="21" x2="30" y2="31" stroke="#0E7C7B" stroke-width="1.5"/>
+      <line x1="50" y1="21" x2="42" y2="31" stroke="#0E7C7B" stroke-width="1.5"/>
+      <line x1="22" y1="51" x2="30" y2="41" stroke="#0E7C7B" stroke-width="1.5"/>
+    </svg>
+    <h1>Does this professional use AI?</h1>
+    <p class="subtitle">Fill in a data professional's profile to estimate whether they currently use AI tools at work.</p>
+  </div>
+
+  <form id="form">
+    <label>Age
+      <select name="Age">
+        <option>18-24 years old</option>
+        <option>25-34 years old</option>
+        <option>35-44 years old</option>
+        <option>45-54 years old</option>
+        <option>55-64 years old</option>
+        <option>65 years or older</option>
+      </select>
+    </label>
+
+    <label>Education level
+      <select name="EdLevel">
+        <option>Primary/elementary school</option>
+        <option>Secondary school (e.g. American high school, German Realschule or Gymnasium, etc.)</option>
+        <option>Some college/university study without earning a degree</option>
+        <option>Associate degree (A.A., A.S., etc.)</option>
+        <option>Bachelor’s degree (B.A., B.S., B.Eng., etc.)</option>
+        <option>Master’s degree (M.A., M.S., M.Eng., MBA, etc.)</option>
+        <option>Professional degree (JD, MD, Ph.D, Ed.D, etc.)</option>
+        <option>Other (please specify):</option>
+      </select>
+    </label>
+
+    <label>Employment status
+      <select name="Employment">
+        <option>Employed</option>
+        <option>Independent contractor, freelancer, or self-employed</option>
+        <option>Not employed</option>
+        <option>Student</option>
+        <option>Retired</option>
+        <option>I prefer not to say</option>
+      </select>
+    </label>
+
+    <label>Recently learning to code?
+      <select name="LearnCodeChoose">
+        <option>Yes, I am new to coding or currently a student</option>
+        <option>Yes, I am not new to coding but am learning new coding techniques or programming language</option>
+        <option>No, I am not new to coding and did not learn new coding techniques or programming languages</option>
+      </select>
+    </label>
+
+    <label>Role
+      <select name="DevType">
+        <option>Data scientist</option>
+        <option>Data engineer</option>
+        <option>Data or business analyst</option>
+        <option>Database administrator or engineer</option>
+        <option>AI/ML engineer</option>
+        <option>Applied scientist</option>
+      </select>
+    </label>
+
+    <label>Organization size
+      <select name="OrgSize">
+        <option>Just me - I am a freelancer, sole proprietor, etc.</option>
+        <option>Less than 20 employees</option>
+        <option>20 to 99 employees</option>
+        <option>100 to 499 employees</option>
+        <option>500 to 999 employees</option>
+        <option>1,000 to 4,999 employees</option>
+        <option>5,000 to 9,999 employees</option>
+        <option>10,000 or more employees</option>
+        <option>I don’t know</option>
+      </select>
+    </label>
+
+    <label>Position
+      <select name="ICorPM">
+        <option>Individual contributor</option>
+        <option>People manager</option>
+      </select>
+    </label>
+
+    <label>Work mode
+      <select name="RemoteWork">
+        <option>In-person</option>
+        <option>Remote</option>
+        <option>Hybrid (some remote, leans heavy to in-person)</option>
+        <option>Hybrid (some in-person, leans heavy to flexibility)</option>
+        <option>Your choice (very flexible, you can come in when you want or just as needed)</option>
+      </select>
+    </label>
+
+    <label>Industry
+      <select name="Industry">
+        <option>Software Development</option>
+        <option>Computer Systems Design and Services</option>
+        <option>Internet, Telecomm or Information Services</option>
+        <option>Banking/Financial Services</option>
+        <option>Fintech</option>
+        <option>Insurance</option>
+        <option>Healthcare</option>
+        <option>Higher Education</option>
+        <option>Government</option>
+        <option>Manufacturing</option>
+        <option>Energy</option>
+        <option>Retail and Consumer Services</option>
+        <option>Media & Advertising Services</option>
+        <option>Transportation, or Supply Chain</option>
+        <option>Other:</option>
+      </select>
+    </label>
+
+    <label>Country
+      <select name="Country">
+        <option>Spain</option><option>Germany</option><option>France</option>
+        <option>United States of America</option><option>Australia</option>
+        <option>Brazil</option><option>Canada</option><option>India</option>
+        <option>Italy</option><option>Netherlands</option><option>Poland</option>
+        <option>Ukraine</option><option>United Kingdom of Great Britain and Northern Ireland</option>
+        <option>Otros</option>
+      </select>
+    </label>
+
+    <label>Annual salary (USD)
+      <input type="number" name="ConvertedCompYearly" required>
+    </label>
+
+    <label>Years of experience
+      <input type="number" name="WorkExp" step="0.1" required>
+    </label>
+
+    <button type="submit">Predict</button>
+  </form>
+
+  <pre id="result"></pre>
+</main>
+
+<script>
+  document.getElementById("form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target));
+    data.ConvertedCompYearly = Number(data.ConvertedCompYearly);
+    data.WorkExp = Number(data.WorkExp);
+    const response = await fetch("/predict", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data)
+    });
+    const result = document.getElementById("result");
+    result.style.display = "block";
+    result.textContent = JSON.stringify(await response.json(), null, 2);
+  });
+</script>
+</body>
+</html>
