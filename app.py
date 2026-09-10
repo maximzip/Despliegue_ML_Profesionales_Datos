@@ -1,8 +1,6 @@
-from flask import Flask, request, jsonify
-from model import cargar_modelo, predecir # model.py
-# import joblib
-# import pandas as pd
-# import os
+from flask import Flask, request, jsonify, render_template
+from model import cargar_modelo, predecir 
+
 
 
 app = Flask(__name__)
@@ -15,14 +13,7 @@ CAMPOS_REQUERIDOS = ['Age', 'EdLevel', 'Employment', 'WorkExp', 'LearnCodeChoose
 
 @app.route("/")
 def home():
-    return jsonify({
-        "mensaje": "API de predicción de profesionales de datos que NO usan IA",
-        "endpoints": {
-            "/predict": "POST con JSON con los 12 campos -> devuelve la predicción de una persona",
-            "/predict_get": "GET de prueba con query string, ej: ?Age=25-34%20years%20old&EdLevel=...&WorkExp=4.0",
-            "/predict_batch": "POST con JSON = lista de personas -> devuelve cuántas no usan IA"
-        },#los espacios entre strings tienen que ser %20 
-    }) 
+    return render_template("index.html")
 
 def _procesar(data: dict) -> tuple[dict, int]:
     """Valida y predice. Devuelve (resultado_o_error, status_code)."""
@@ -55,27 +46,27 @@ def predict_get():
 # 3er ENDPOINT. POST con JSON de datos plantilla (se despliega en la presentación)
 # El cliente sube un archivo JSON con los datos de cada trabajador de su plantilla con cada variable 
 # sería como una lista como la siguiente: [{...trabajador1...}, {...trabajador2...}]
-# @app.route("/predict_batch", methods=["POST"])
-# def predict_batch():
-#     lista_empleados = request.get_json()
-#     if not isinstance(lista_empleados, list):
-#         return jsonify({"error": "Se espera una lista de empleados"}), 400
+@app.route("/predict_batch", methods=["POST"])
+def predict_batch():
+    lista_empleados = request.get_json()
+    if not isinstance(lista_empleados, list):
+        return jsonify({"error": "Se espera una lista de empleados"}), 400
 
-#     validos = []
-#     errores = []
-#     for emp in lista_empleados:
-#         resultado, status = _procesar(emp)
-#         (validos if status == 200 else errores).append(resultado)
+    validos = []
+    errores = []
+    for emp in lista_empleados:
+        resultado, status = _procesar(emp)
+        (validos if status == 200 else errores).append(resultado)
 
-#     no_usa_ia = sum(1 for r in validos if r.get("prediction") == 0)
+    no_usa_ia = sum(1 for r in validos if r.get("prediction") == 0)
 
-#     return jsonify({
-#         "total_empleados": len(lista_empleados),
-#         "procesados_correctamente": len(validos),
-#         "con_error": len(errores),
-#         "no_usan_ia": no_usa_ia,
-#         "porcentaje": round(no_usa_ia / len(validos) * 100, 1) if validos else 0
-#     })
+    return jsonify({
+        "total_empleados": len(lista_empleados),
+        "procesados_correctamente": len(validos),
+        "con_error": len(errores),
+        "no_usan_ia": no_usa_ia,
+        "porcentaje": round(no_usa_ia / len(validos) * 100, 1) if validos else 0
+    })
 
 
 if __name__ == "__main__":
