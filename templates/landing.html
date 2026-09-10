@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Usage Prediction — API</title>
+  <meta name="description" content="Prediction API to estimate AI tool usage among data professionals.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#f7f6f2; --card:#fff; --ink:#1b1f23; --muted:#687078;
+      --accent:#0e7c7b; --accent-dark:#0a5f5e; --line:#dad7ce; --soft:#e9f3f1;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',sans-serif}
+    a{color:inherit}
+    .wrap{width:min(1080px,calc(100% - 40px));margin:auto}
+    nav{display:flex;align-items:center;justify-content:space-between;padding:26px 0}
+    .brand{font-weight:600;letter-spacing:-.02em}
+    .brand span{color:var(--accent)}
+    nav a{text-decoration:none;color:var(--muted);font-size:14px;margin-left:24px}
+    nav a:hover{color:var(--ink)}
+    .hero{padding:76px 0 86px;display:grid;grid-template-columns:1.35fr .65fr;gap:70px;align-items:center}
+    .eyebrow{display:inline-flex;padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:var(--accent-dark);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+    h1{font-family:'Fraunces',serif;font-size:clamp(48px,7vw,78px);line-height:.98;letter-spacing:-.045em;font-weight:600;margin:22px 0 22px;max-width:760px}
+    .hero p{font-size:19px;line-height:1.6;color:var(--muted);max-width:650px;margin:0}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+    .btn{display:inline-block;text-decoration:none;border-radius:7px;padding:13px 18px;font-weight:600;font-size:14px}
+    .primary{background:var(--accent);color:white}.primary:hover{background:var(--accent-dark)}
+    .secondary{border:1px solid var(--line);background:var(--card)}
+    .signal{background:var(--soft);border-radius:18px;padding:30px}
+    .signal svg{width:100%;height:auto}
+    .signal small{display:block;color:var(--muted);line-height:1.5;margin-top:14px}
+    section{padding:78px 0;border-top:1px solid var(--line)}
+    .section-head{max-width:680px;margin-bottom:38px}
+    h2{font-family:'Fraunces',serif;font-size:42px;line-height:1.1;margin:0 0 12px}
+    .section-head p{color:var(--muted);line-height:1.6;margin:0}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px}
+    .number{font-family:'IBM Plex Mono',monospace;color:var(--accent);font-size:13px;margin-bottom:30px}
+    h3{font-size:18px;margin:0 0 9px}.card p{color:var(--muted);line-height:1.55;margin:0}
+    .endpoints{display:grid;gap:10px}
+    .endpoint{display:flex;align-items:center;gap:15px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:15px 18px}
+    code{font-family:'IBM Plex Mono',monospace;font-size:13px}
+    .method{min-width:54px;font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--accent-dark)}
+    .endpoint span:last-child{color:var(--muted);font-size:14px}
+    .codebox{background:#202528;color:#f5f5f2;border-radius:12px;padding:24px;overflow:auto}
+    .codebox code{font-size:13px;line-height:1.75;white-space:pre}
+    .note{margin-top:14px;color:var(--muted);font-size:13px;line-height:1.5}
+    .fields{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .field{background:var(--card);border:1px solid var(--line);padding:15px;border-radius:8px}
+    .field code{display:block;margin-bottom:5px}.field span{font-size:13px;color:var(--muted)}
+    .cta{background:var(--accent);color:white;border-radius:18px;padding:48px;display:flex;justify-content:space-between;align-items:center;gap:30px}
+    .cta h2{margin:0}.cta p{opacity:.85;line-height:1.5;margin:8px 0 0;max-width:600px}
+    .cta .btn{background:white;color:var(--ink);white-space:nowrap}
+    footer{padding:34px 0 45px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:20px}
+    @media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:45px}.grid{grid-template-columns:1fr}.fields{grid-template-columns:1fr}.cta{display:block}.cta .btn{display:inline-block;margin-top:20px}nav a{margin-left:12px}}
+    @media(max-width:520px){.wrap{width:min(100% - 28px,1080px)}nav a:not(:last-child){display:none}h2{font-size:34px}.hero p{font-size:17px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <div class="brand">AI Usage <span>Prediction</span></div>
+      <div>
+        <a href="#how-it-works">How it works</a>
+        <a href="#api">API</a>
+        <a href="#data">Data</a>
+      </div>
+    </nav>
+
+    <main>
+      <header class="hero">
+        <div>
+          <span class="eyebrow">API · Machine Learning</span>
+          <h1>Does a data professional use AI?</h1>
+          <p>
+            A classification API that estimates whether a person uses artificial
+            intelligence tools at work based on demographic and professional information
+            from the Stack Overflow Developer Survey 2025.
+          </p>
+          <div class="actions">
+            <a class="btn primary" href="/app">Try the prediction →</a>
+            <a class="btn secondary" href="#api">View endpoints</a>
+          </div>
+        </div>
+
+        <div class="signal" aria-label="Prediction diagram">
+          <svg viewBox="0 0 360 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="24" y="92" width="92" height="66" rx="9" fill="white" stroke="#DAD7CE"/>
+            <rect x="244" y="72" width="92" height="106" rx="9" fill="white" stroke="#DAD7CE"/>
+            <circle cx="180" cy="125" r="38" fill="#0E7C7B"/>
+            <path d="M116 125H142M218 125H244" stroke="#0E7C7B" stroke-width="2"/>
+            <path d="M132 103L158 112M132 147L158 138" stroke="#0E7C7B" stroke-width="2"/>
+            <circle cx="52" cy="114" r="5" fill="#0E7C7B"/><circle cx="72" cy="134" r="5" fill="#0E7C7B"/>
+            <path d="M260 102H320M260 123H307M260 144H315" stroke="#DAD7CE" stroke-width="6" stroke-linecap="round"/>
+            <text x="153" y="131" fill="white" font-family="IBM Plex Sans" font-size="13" font-weight="600">ML</text>
+          </svg>
+          <small>Professional profile → classification model → AI usage estimation</small>
+        </div>
+      </header>
+
+      <section id="how-it-works">
+        <div class="section-head">
+          <h2>Simple to understand, easy to integrate.</h2>
+          <p>The API receives an individual's features and returns a prediction. The project's goal is to estimate training needs across a workforce.</p>
+        </div>
+        <div class="grid">
+          <article class="card"><div class="number">01 / INPUT</div><h3>Professional Profile</h3><p>Age, education, employment status, experience, role, organization size, work mode, industry, country, and salary.</p></article>
+          <article class="card"><div class="number">02 / MODEL</div><h3>LogisticRegression</h3><p>A classification model processes the input features to estimate the target variable.</p></article>
+          <article class="card"><div class="number">03 / OUTPUT</div><h3>Prediction</h3><p>The API allows querying individual profiles or processing an entire workforce to obtain counts and percentages.</p></article>
+        </div>
+      </section>
+
+      <section id="api">
+        <div class="section-head">
+          <h2>Endpoints</h2>
+          <p>Four routes cover the web interface, individual predictions, and batch workforce processing.</p>
+        </div>
+        <div class="endpoints">
+          <div class="endpoint"><span class="method">GET</span><code>/</code><span>Main landing page presenting the project and API documentation.</span></div>
+          <div class="endpoint"><span class="method">GET</span><code>/app</code><span>Web interface to test individual and batch models interactively.</span></div>
+          <div class="endpoint"><span class="method">POST</span><code>/predict</code><span>Single-person prediction via JSON payload.</span></div>
+          <div class="endpoint"><span class="method">GET</span><code>/predict_get</code><span>Same prediction via URL query string, useful for quick testing.</span></div>
+          <div class="endpoint"><span class="method">POST</span><code>/predict_batch</code><span>Batch evaluation of a full workforce and summary of non-AI users.</span></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2>Make a request</h2>
+          <p>For an individual prediction, send all 12 required fields as JSON to <code>/predict</code>.</p>
+        </div>
+        <div class="codebox"><code>curl -X POST https://&lt;your-app&gt;.onrender.com/predict \
+  -H "Content-Type: application/json" \
+  -d '{"Age":"25-34 years old","EdLevel":"...","Employment":"Employed",
+       "WorkExp":4.0,"LearnCodeChoose":"...","DevType":"Data scientist",
+       "OrgSize":"100 to 499 employees","ICorPM":"Individual contributor",
+       "RemoteWork":"Remote","Industry":"Software Development",
+       "Country":"Spain","ConvertedCompYearly":45000}'</code></div>
+        <p class="note">Categorical values must match the options supported by the API. The web interface provides selector dropdowns with the exact expected values.</p>
+      </section>
+
+      <section id="data">
+        <div class="section-head">
+          <h2>Input variables</h2>
+          <p>The input fields correspond to the schema detailed in the project's README.</p>
+        </div>
+        <div class="fields">
+          <div class="field"><code>Age</code><span>Categorical</span></div>
+          <div class="field"><code>EdLevel</code><span>Categorical</span></div>
+          <div class="field"><code>Employment</code><span>Categorical</span></div>
+          <div class="field"><code>WorkExp</code><span>Numerical · years</span></div>
+          <div class="field"><code>LearnCodeChoose</code><span>Categorical</span></div>
+          <div class="field"><code>DevType</code><span>Categorical</span></div>
+          <div class="field"><code>OrgSize</code><span>Categorical</span></div>
+          <div class="field"><code>ICorPM</code><span>Categorical</span></div>
+          <div class="field"><code>RemoteWork</code><span>Categorical</span></div>
+          <div class="field"><code>Industry</code><span>Categorical</span></div>
+          <div class="field"><code>Country</code><span>Categorical</span></div>
+          <div class="field"><code>ConvertedCompYearly</code><span>Numerical · USD</span></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="cta">
+          <div>
+            <h2>Want to try it?</h2>
+            <p>Access the app interface and fill out a profile to send a live prediction to the endpoint.</p>
+          </div>
+          <a class="btn" href="/app">Open the application →</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>AI Usage Prediction</span>
+      <span>Developed by Maksym Chaika Palamaryuk</span>
+    </footer>
+  </div>
+</body>
+</html>

@@ -46,6 +46,13 @@
     line-height: 1.2;
     margin: 0 0 8px;
   }
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 1.2;
+    margin: 0 0 8px;
+  }
   .subtitle {
     color: var(--muted);
     font-size: 15px;
@@ -91,7 +98,9 @@
     cursor: pointer;
   }
   button:hover { background: var(--accent-dark); }
-  #result {
+  
+  /* Estilos para mostrar resultados */
+  .result-box {
     margin-top: 28px;
     padding: 16px 18px;
     background: #fff;
@@ -102,10 +111,22 @@
     white-space: pre-wrap;
     display: none;
   }
+
+  /* Separador vertical limpio */
+  .divider {
+    margin: 48px 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .batch-section {
+    text-align: center;
+  }
 </style>
 </head>
 <body>
 <main>
+  <!-- SECCIÓN FORMULARIO INDIVIDUAL -->
   <div class="hero">
     <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="18" cy="18" r="5" stroke="#0E7C7B" stroke-width="1.5"/>
@@ -245,13 +266,32 @@
       <input type="number" name="WorkExp" step="0.1" required>
     </label>
 
-    <button type="submit">Predict</button>
+    <button type="submit">Predict Single</button>
   </form>
 
-  <pre id="result"></pre>
+  <pre id="result" class="result-box"></pre>
+
+  <!-- LÍNEA DIVISORA -->
+  <hr class="divider">
+
+  <!-- SECCIÓN PROCESAMIENTO EN LOTE (BATCH) -->
+  <div class="batch-section">
+    <h2>Batch Prediction</h2>
+    <p class="subtitle">Upload a JSON file containing a list of employee profiles to evaluate a full team.</p>
+
+    <form id="batch-form" style="margin-top: 24px; text-align: left;">
+      <label>Employee JSON File
+        <input type="file" id="json-file" accept=".json" required>
+      </label>
+      <button type="submit">Predict Batch</button>
+    </form>
+
+    <pre id="batch-result" class="result-box" style="text-align: left;"></pre>
+  </div>
 </main>
 
 <script>
+  // Script para predicción individual (/predict)
   document.getElementById("form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.target));
@@ -265,6 +305,37 @@
     const result = document.getElementById("result");
     result.style.display = "block";
     result.textContent = JSON.stringify(await response.json(), null, 2);
+  });
+
+  // Script para predicción por archivo/lote (/predict_batch)
+  document.getElementById("batch-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById("json-file");
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const data = JSON.parse(event.target.result);
+
+        const response = await fetch("/predict_batch", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const batchResult = document.getElementById("batch-result");
+        batchResult.style.display = "block";
+        const resultData = await response.json();
+        batchResult.textContent = JSON.stringify(resultData, null, 2);
+
+      } catch (err) {
+        alert("Invalid JSON file.");
+      }
+    };
+    reader.readAsText(file);
   });
 </script>
 </body>

@@ -12,6 +12,10 @@ CAMPOS_REQUERIDOS = ['Age', 'EdLevel', 'Employment', 'WorkExp', 'LearnCodeChoose
     'Country', 'ConvertedCompYearly']
 
 @app.route("/")
+def landing():
+    return render_template("landing.html")
+
+@app.route("/app")
 def home():
     return render_template("index.html")
 
